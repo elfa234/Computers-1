@@ -1,0 +1,2125 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="Rumah Sakit Terakhir adalah game horror investigasi tiga chapter. Ungkap misteri rumah sakit yang ditinggalkan dan temukan rahasia kamar 317.">
+<meta name="author" content="Studio Ruang Sunyi">
+<meta name="theme-color" content="#101a18">
+<meta name="color-scheme" content="dark">
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Rumah Sakit Terakhir">
+<meta name="mobile-web-app-capable" content="yes">
+<meta property="og:type" content="game">
+<meta property="og:title" content="Rumah Sakit Terakhir">
+<meta property="og:description" content="Sebuah misteri menunggu di bangsal 317.">
+<meta property="og:locale" content="id_ID">
+<meta property="og:site_name" content="Rumah Sakit Terakhir">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Rumah Sakit Terakhir">
+<meta name="twitter:description" content="Game horror investigasi tiga chapter.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23101a18'/%3E%3Cpath d='M43 15h14v28h28v14H57v28H43V57H15V43h28z' fill='%23b47d54'/%3E%3C/svg%3E">
+<title>Rumah Sakit Terakhir</title>
+
+<style>
+:root {
+  --bg: #101a18;
+  --panel: #1b2925;
+  --panel2: #26352f;
+  --accent: #bc8960;
+  --accent2: #e2b58b;
+  --text: #e9e5d9;
+  --muted: #a9b1a5;
+  --danger: #b55d53;
+  --line: #435048;
+  --display: Georgia, "Times New Roman", serif;
+  --body: "Trebuchet MS", Verdana, sans-serif;
+  --mono: "Courier New", monospace;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  min-height: 100%;
+  background: var(--bg);
+  -webkit-text-size-adjust: 100%;
+  overscroll-behavior: none;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  color: var(--text);
+  background: var(--bg);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.55;
+  overflow-x: hidden;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+button:focus-visible {
+  outline: 3px solid var(--accent2);
+  outline-offset: 4px;
+}
+
+button:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  opacity: .055;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+}
+
+button:active {
+  transform: translateY(2px);
+}
+
+button:focus-visible {
+  z-index: 2;
+}
+
+#app {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  min-height: 66px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: max(12px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) 12px max(20px, env(safe-area-inset-left));
+  border-bottom: 1px solid var(--line);
+  background: #15211e;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--display);
+  letter-spacing: .04em;
+}
+
+.brand-mark {
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--accent);
+  display: grid;
+  place-items: center;
+  color: var(--accent2);
+  font-size: 21px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.icon-btn {
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--line);
+  background: transparent;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-size: 19px;
+}
+
+.icon-btn:hover {
+  color: var(--accent2);
+  border-color: var(--accent);
+}
+
+main {
+  flex: 1;
+  width: min(1120px, 100%);
+  margin: auto;
+  padding: 28px 24px;
+}
+
+.screen {
+  display: none;
+  animation: appear .45s ease both;
+}
+
+.screen.active {
+  display: block;
+}
+
+@keyframes appear {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.eyebrow {
+  color: var(--accent2);
+  font-family: var(--mono);
+  font-size: .78rem;
+  letter-spacing: .17em;
+  text-transform: uppercase;
+}
+
+h1, h2, h3 {
+  font-family: var(--display);
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+h1 {
+  font-size: clamp(2.7rem, 7vw, 5.8rem);
+  letter-spacing: -.045em;
+  margin: 18px 0;
+}
+
+h2 {
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
+}
+
+p {
+  color: var(--muted);
+  max-width: 68ch;
+}
+
+.menu-layout {
+  min-height: 68vh;
+  display: grid;
+  grid-template-columns: 1.2fr .8fr;
+  align-items: center;
+  gap: 40px;
+}
+
+.menu-copy {
+  padding: 30px 0;
+}
+
+.menu-copy h1 span {
+  display: block;
+  color: var(--accent2);
+}
+
+.menu-copy .intro {
+  font-size: 1.08rem;
+  max-width: 440px;
+}
+
+.menu-art {
+  min-height: 430px;
+  background:
+    linear-gradient(0deg, rgba(10,18,16,.9), transparent 65%),
+    linear-gradient(90deg, rgba(16,26,24,.2), rgba(16,26,24,.7)),
+    repeating-linear-gradient(90deg, #26352e 0 2px, #19251f 2px 72px);
+  border: 1px solid var(--line);
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 25px;
+  overflow: hidden;
+}
+
+.menu-art::before {
+  content: "+";
+  position: absolute;
+  top: 12%;
+  left: 42%;
+  font-size: 160px;
+  color: rgba(188,137,96,.12);
+  font-family: var(--display);
+}
+
+.menu-art::after {
+  content: "";
+  position: absolute;
+  width: 130px;
+  height: 230px;
+  right: 20%;
+  top: 18%;
+  background: linear-gradient(#090e0d, #15201c);
+  border-radius: 48% 48% 0 0;
+  opacity: .8;
+  box-shadow: 0 0 70px #0b100e;
+}
+
+.art-caption {
+  position: relative;
+  z-index: 1;
+  font-family: var(--mono);
+  font-size: .76rem;
+  letter-spacing: .12em;
+  color: var(--accent2);
+}
+
+.menu-buttons {
+  display: grid;
+  gap: 10px;
+  max-width: 320px;
+  margin-top: 32px;
+}
+
+.btn {
+  min-height: 50px;
+  padding: 12px 20px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  text-align: left;
+  transition: background .2s, border-color .2s;
+}
+
+.btn:hover {
+  background: var(--panel2);
+  border-color: var(--accent);
+}
+
+.btn.primary {
+  background: var(--accent);
+  color: #18201c;
+  border-color: var(--accent);
+  font-weight: bold;
+}
+
+.btn.primary:hover {
+  background: var(--accent2);
+}
+
+.btn.danger {
+  color: #f0c2b6;
+  border-color: #80544d;
+}
+
+.btn.center {
+  text-align: center;
+}
+
+.game-hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 15px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.hud-stat {
+  font-family: var(--mono);
+  font-size: .82rem;
+  color: var(--muted);
+}
+
+.hud-stat strong {
+  color: var(--accent2);
+  font-size: 1rem;
+}
+
+.chapter-label {
+  font-family: var(--mono);
+  color: var(--accent2);
+  letter-spacing: .16em;
+  font-size: .78rem;
+}
+
+.story-layout {
+  display: grid;
+  grid-template-columns: 1fr 250px;
+  gap: 36px;
+}
+
+.story-panel {
+  min-width: 0;
+}
+
+.story-title {
+  font-size: clamp(2rem, 5vw, 3.7rem);
+  margin: 12px 0 24px;
+}
+
+.story-text {
+  color: #d4d2c6;
+  font-family: var(--display);
+  font-size: clamp(1.08rem, 2vw, 1.3rem);
+  line-height: 1.9;
+  white-space: pre-line;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.story-text p {
+  color: inherit;
+  max-width: 65ch;
+}
+
+.choices {
+  display: grid;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.choice {
+  min-height: 56px;
+  padding: 14px 18px;
+  text-align: left;
+  border: 1px solid var(--line);
+  background: #18231f;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+.choice:hover {
+  border-color: var(--accent);
+  background: #26332d;
+}
+
+.choice::before {
+  content: "› ";
+  color: var(--accent2);
+  font-size: 1.3rem;
+}
+
+.sidebar {
+  border-left: 1px solid var(--line);
+  padding-left: 22px;
+}
+
+.sidebar h3 {
+  font-size: 1.25rem;
+  color: var(--accent2);
+}
+
+.clue-list {
+  display: grid;
+  gap: 12px;
+}
+
+.clue-item {
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+  font-size: .87rem;
+  color: var(--muted);
+}
+
+.clue-item.found {
+  color: var(--text);
+}
+
+.clue-item.found::before {
+  content: "◆ ";
+  color: var(--accent2);
+}
+
+.clue-item:not(.found)::before {
+  content: "◇ ";
+}
+
+.meter {
+  height: 7px;
+  background: #35413a;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.meter-fill {
+  height: 100%;
+  background: var(--accent);
+  width: 100%;
+  transition: width .3s;
+}
+
+.game-controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.game-controls .btn {
+  flex: 1;
+  text-align: center;
+  min-width: 110px;
+}
+
+.panel {
+  width: min(550px, 100%);
+  margin: 30px auto;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  padding: clamp(20px, 5vw, 36px);
+}
+
+.panel h2 {
+  margin-top: 0;
+}
+
+.setting-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.setting-row select,
+.setting-row input {
+  max-width: 180px;
+  font-size: 16px;
+  min-height: 42px;
+  color: var(--text);
+  background: #111c18;
+  border: 1px solid var(--line);
+  padding: 8px;
+}
+
+input[type="range"] {
+  accent-color: var(--accent);
+}
+
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: rgba(5,10,8,.96);
+  align-items: center;
+  justify-content: center;
+  padding: max(20px, env(safe-area-inset-top)) 20px max(20px, env(safe-area-inset-bottom));
+}
+
+.overlay.active {
+  display: flex;
+  animation: appear .2s ease;
+}
+
+.overlay-content {
+  width: min(520px, 100%);
+  text-align: center;
+  padding: 30px 20px;
+}
+
+.overlay-content h2 {
+  font-size: clamp(2rem, 8vw, 4rem);
+  color: var(--accent2);
+}
+
+.scare {
+  position: fixed;
+  inset: 0;
+  background: #090e0d;
+  z-index: 40;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 20px;
+}
+
+.scare.active {
+  display: flex;
+  animation: scareFlash .35s steps(2) 2;
+}
+
+@keyframes scareFlash {
+  0%, 100% { background: #090e0d; }
+  50% { background: #e2d9c6; }
+}
+
+.shadow-figure {
+  width: 150px;
+  height: 260px;
+  background: #050807;
+  border-radius: 50% 50% 15% 15%;
+  position: relative;
+  box-shadow: 0 0 50px rgba(0,0,0,.8);
+  animation: appear .25s;
+}
+
+.shadow-figure::before {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 8px;
+  top: 75px;
+  left: 38px;
+  background: #c7b18c;
+  box-shadow: 62px 0 #c7b18c;
+}
+
+.scare h2 {
+  color: #d4c8ad;
+  font-family: var(--mono);
+  font-size: clamp(1.3rem, 5vw, 2.4rem);
+  letter-spacing: .2em;
+  margin-top: 30px;
+  text-align: center;
+}
+
+.scare button {
+  margin-top: 20px;
+}
+
+.chapter-transition {
+  text-align: center;
+  padding: 70px 15px;
+}
+
+.chapter-transition h2 {
+  font-size: clamp(2.2rem, 7vw, 4.5rem);
+}
+
+.ending-mark {
+  color: var(--accent2);
+  font-size: 4rem;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  color: #88958a;
+  font-family: var(--mono);
+  font-size: .72rem;
+  letter-spacing: .08em;
+  border-top: 1px solid var(--line);
+}
+
+.status-message {
+  min-height: 24px;
+  color: var(--accent2);
+  font-family: var(--mono);
+  font-size: .8rem;
+}
+
+.hidden {
+  display: none !important;
+}
+
+@media(max-width: 768px) {
+  main { padding: 22px 20px; }
+  .menu-layout { grid-template-columns: 1fr; gap: 10px; }
+  .menu-art { min-height: 210px; }
+  .menu-copy { padding: 20px 0 0; }
+  .story-layout { grid-template-columns: 1fr; }
+  .sidebar {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+    padding: 15px 0 0;
+  }
+  .clue-list { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media(max-width: 480px) {
+  header { padding-left: 16px; padding-right: 16px; }
+  .brand { font-size: .85rem; }
+  main { padding: 16px; }
+  .menu-art { min-height: 165px; }
+  .menu-copy h1 { font-size: clamp(2.8rem, 15vw, 4.2rem); }
+  .game-hud { align-items: flex-start; }
+  .game-controls .btn { min-width: 100%; }
+  .panel { margin: 12px auto; }
+  .setting-row { align-items: flex-start; flex-direction: column; }
+  .setting-row select, .setting-row input { max-width: none; width: 100%; }
+}
+
+@media(min-width: 1200px) {
+  main { padding-top: 45px; padding-bottom: 45px; }
+}
+
+@media(orientation: landscape) and (max-height: 550px) {
+  .menu-layout { min-height: auto; grid-template-columns: 1.2fr .8fr; }
+  .menu-art { min-height: 220px; }
+  main { padding-top: 12px; padding-bottom: 12px; }
+}
+
+@media(prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<div id="app">
+<header>
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true">+</span>
+    <span>RUMAH SAKIT TERAKHIR</span>
+  </div>
+  <div class="header-actions">
+    <button class="icon-btn" id="fullscreenBtn" aria-label="Fullscreen" title="Fullscreen">⛶</button>
+    <button class="icon-btn" id="soundBtn" aria-label="Suara" title="Suara">♫</button>
+  </div>
+</header>
+
+<main>
+<section id="menuScreen" class="screen active">
+  <div class="menu-layout">
+    <div class="menu-copy">
+      <div class="eyebrow">Arsip kasus nomor 0317</div>
+      <h1>RUMAH SAKIT <span>TERAKHIR</span></h1>
+      <p class="intro">
+        Rumah sakit ini telah ditutup selama 17 tahun.
+        Tetapi seseorang masih menyalakan lampu di kamar 317.
+      </p>
+      <div class="menu-buttons">
+        <button class="btn primary" id="startBtn">▶ &nbsp; MULAI PERMAINAN</button>
+        <button class="btn" id="continueBtn">Lanjutkan permainan</button>
+        <button class="btn" id="settingsBtn">Pengaturan</button>
+        <button class="btn" id="howBtn">Cara bermain & informasi</button>
+      </div>
+      <p class="status-message" id="menuStatus" aria-live="polite"></p>
+    </div>
+    <div class="menu-art" role="img" aria-label="Ilustrasi lorong rumah sakit gelap">
+      <div class="art-caption">RS HARAPAN — DITUTUP SEJAK 2009</div>
+    </div>
+  </div>
+</section>
+
+<section id="gameScreen" class="screen">
+  <div class="game-hud" aria-live="polite">
+    <div class="hud-stat">CHAPTER <strong id="hudChapter">01</strong></div>
+    <div class="hud-stat">PETUNJUK <strong id="hudClues">0/6</strong></div>
+    <div class="hud-stat">
+      KETENANGAN <strong id="hudCalm">100%</strong>
+      <div class="meter"><div class="meter-fill" id="calmFill"></div></div>
+    </div>
+  </div>
+
+  <div class="story-layout">
+    <article class="story-panel">
+      <div class="chapter-label" id="sceneLabel">CHAPTER 01 — RUANG PENERIMAAN</div>
+      <h2 class="story-title" id="sceneTitle">Ruang Penerimaan</h2>
+      <div class="story-text" id="sceneText" aria-live="polite"></div>
+      <div class="choices" id="choices"></div>
+    </article>
+
+    <aside class="sidebar">
+      <h3>Catatan Investigasi</h3>
+      <p>Setiap petunjuk dapat mengungkap bagian berbeda dari misteri ini.</p>
+      <div class="clue-list" id="clueList"></div>
+      <div class="game-controls">
+        <button class="btn" id="pauseBtn">Ⅱ Jeda</button>
+        <button class="btn" id="journalBtn">Buku catatan</button>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section id="settingsScreen" class="screen">
+  <div class="panel">
+    <div class="eyebrow">Preferensi pemain</div>
+    <h2>Pengaturan</h2>
+    <div class="setting-row">
+      <label for="sfxSetting">Efek suara</label>
+      <input type="checkbox" id="sfxSetting">
+    </div>
+    <div class="setting-row">
+      <label for="musicSetting">Suara suasana</label>
+      <input type="checkbox" id="musicSetting">
+    </div>
+    <div class="setting-row">
+      <label for="volumeSetting">Volume</label>
+      <input type="range" id="volumeSetting" min="0" max="100" value="45">
+    </div>
+    <div class="setting-row">
+      <label for="difficultySetting">Tingkat kesulitan</label>
+      <select id="difficultySetting">
+        <option value="easy">Tenang</option>
+        <option value="normal">Normal</option>
+        <option value="hard">Mencekam</option>
+      </select>
+    </div>
+    <button class="btn primary center" id="settingsBackBtn">Simpan & kembali</button>
+  </div>
+</section>
+
+<section id="howScreen" class="screen">
+  <div class="panel">
+    <div class="eyebrow">Panduan investigasi</div>
+    <h2>Cara Bermain</h2>
+    <p>1. Baca setiap dokumen dan percakapan dengan teliti.</p>
+    <p>2. Pilih tindakan untuk menyelidiki lokasi.</p>
+    <p>3. Kumpulkan enam petunjuk untuk membuka rahasia sebenarnya.</p>
+    <p>4. Jaga ketenangan. Beberapa kejadian dapat mengurangi ketenanganmu.</p>
+    <p>5. Pilihan tertentu memicu jumpscare. Tidak semua yang terlihat adalah manusia.</p>
+    <h3>Kontrol keyboard</h3>
+    <p>ESC / P — Jeda atau lanjutkan.</p>
+    <p>M — Hidupkan atau matikan suara.</p>
+    <p>F — Fullscreen.</p>
+    <p>R — Mulai ulang dengan konfirmasi.</p>
+    <p>ENTER — Pilih tombol yang sedang difokuskan.</p>
+    <p>Di Android, gunakan tombol pada layar.</p>
+    <button class="btn primary center" id="howBackBtn">Kembali</button>
+  </div>
+</section>
+
+<section id="chapterScreen" class="screen">
+  <div class="chapter-transition">
+    <div class="eyebrow">Arsip berhasil dibuka</div>
+    <h2 id="chapterHeading">CHAPTER 02</h2>
+    <p id="chapterDescription"></p>
+    <button class="btn primary center" id="chapterContinueBtn">Lanjutkan penyelidikan</button>
+  </div>
+</section>
+
+<section id="endingScreen" class="screen">
+  <div class="panel">
+    <div class="ending-mark">✦</div>
+    <div class="eyebrow">Arsip kasus 0317 — selesai</div>
+    <h2 id="endingTitle">Akhir cerita</h2>
+    <p id="endingText"></p>
+    <p id="endingStats"></p>
+    <button class="btn primary center" id="endingRestartBtn">Mainkan kembali</button>
+    <button class="btn center" id="endingMenuBtn">Kembali ke menu</button>
+  </div>
+</section>
+
+<section id="gameoverScreen" class="screen">
+  <div class="chapter-transition">
+    <div class="eyebrow">Sinyal terputus</div>
+    <h2>KEHILANGAN KONTAK</h2>
+    <p>Kamu tidak mampu melanjutkan penyelidikan. Misteri rumah sakit masih belum terungkap.</p>
+    <button class="btn primary center" id="retryBtn">Coba lagi dari awal</button>
+    <button class="btn center" id="gameoverMenuBtn">Kembali ke menu</button>
+  </div>
+</section>
+</main>
+
+<footer>ARSIP RS HARAPAN · 0317 · TAHUN 2009</footer>
+</div>
+
+<div class="overlay" id="pauseOverlay" role="dialog" aria-modal="true" aria-labelledby="pauseTitle">
+  <div class="overlay-content">
+    <div class="eyebrow">Waktu dihentikan</div>
+    <h2 id="pauseTitle">Permainan dijeda</h2>
+    <p>Rumah sakit tetap diam. Setidaknya untuk sekarang.</p>
+    <button class="btn primary center" id="resumeBtn">Lanjutkan</button>
+    <button class="btn center" id="pauseRestartBtn">Mulai ulang</button>
+    <button class="btn center" id="pauseMenuBtn">Keluar ke menu</button>
+  </div>
+</div>
+
+<div class="overlay" id="journalOverlay" role="dialog" aria-modal="true" aria-labelledby="journalTitle">
+  <div class="overlay-content">
+    <div class="eyebrow">Dokumen investigasi</div>
+    <h2 id="journalTitle">Buku Catatan</h2>
+    <div id="journalContent"></div>
+    <button class="btn primary center" id="journalCloseBtn">Tutup catatan</button>
+  </div>
+</div>
+
+<div class="scare" id="scareOverlay" role="alertdialog" aria-modal="true" aria-labelledby="scareTitle">
+  <div class="shadow-figure" aria-hidden="true"></div>
+  <h2 id="scareTitle">JANGAN MENENGOK.</h2>
+  <p id="scareText">Ada seseorang berdiri di belakangmu.</p>
+  <button class="btn primary center" id="scareContinueBtn">Aku harus pergi...</button>
+</div>
+
+<div class="overlay" id="onboardingOverlay" role="dialog" aria-modal="true" aria-labelledby="onboardingTitle">
+  <div class="overlay-content">
+    <div class="eyebrow">Sebelum masuk</div>
+    <h2 id="onboardingTitle">Dengarkan baik-baik.</h2>
+    <p>Gunakan headphone jika nyaman. Mainkan di tempat yang aman dan dengan volume yang sesuai.</p>
+    <p>Permainan memiliki efek kejutan visual dan suara. Kamu bisa mematikan suara melalui pengaturan.</p>
+    <button class="btn primary center" id="onboardingBtn">Saya mengerti</button>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+/* =========================================
+   RUMAH SAKIT TERAKHIR
+   Mesin cerita interaktif tiga chapter.
+========================================= */
+
+const STORAGE_KEY = "rumah_sakit_terakhir_v1";
+const MAX_CALM = 100;
+
+const DEFAULT_SETTINGS = {
+  sfx: true,
+  music: true,
+  volume: 45,
+  difficulty: "normal"
+};
+
+const CHAPTERS = [
+  "RUANG PENERIMAAN",
+  "BANGSAL 317",
+  "KAMAR TERAKHIR"
+];
+
+const CLUES = [
+  "Buku penerimaan pasien",
+  "Kartu identitas perawat",
+  "Rekaman panggilan malam",
+  "Catatan pasien 317",
+  "Laporan penutupan",
+  "Surat terakhir"
+];
+
+const SCENES = {
+  lobby: {
+    chapter: 0,
+    title: "Ruang Penerimaan",
+    text: `03.17.
+
+Kamu membuka mata di lantai rumah sakit yang dingin.
+
+Lampu di atas meja penerimaan berkedip. Debu menutupi hampir seluruh ruangan. Sebuah kalender menunjukkan bulan Oktober 2009.
+
+Di meja terdapat sebuah buku penerimaan pasien.
+
+Pintu keluar berada tepat di belakangmu. Anehnya, pintu itu terkunci dari luar.`,
+    choices: [
+      { text: "Periksa buku penerimaan", next: "register", clue: 0 },
+      { text: "Cari petugas di meja perawat", next: "nurse", clue: 1 },
+      { text: "Panggil seseorang dari lorong", next: "corridor", scare: true, loss: 12 }
+    ]
+  },
+
+  register: {
+    chapter: 0,
+    title: "Buku Penerimaan",
+    text: `Buku itu terbuka pada halaman terakhir.
+
+Hampir semua nama pasien telah dicoret.
+
+Namun ada satu nama yang masih terbaca dengan jelas.
+
+Namamu sendiri.
+
+Tanggal masuk: 17 Oktober 2009.
+
+Tanggal keluar: kosong.
+
+Di sudut halaman terdapat tulisan kecil: "Jangan biarkan pasien kembali ke kamar 317."`,
+    choices: [
+      { text: "Cari kartu identitas perawat", next: "nurse", clue: 1 },
+      { text: "Pergi ke lorong utama", next: "corridor" }
+    ]
+  },
+
+  nurse: {
+    chapter: 0,
+    title: "Meja Perawat",
+    text: `Di balik meja, kamu menemukan sebuah laci yang setengah terbuka.
+
+Ada kartu identitas dengan foto seorang perawat bernama Mira.
+
+Di bagian belakang kartu tertulis:
+
+"Jika bel berbunyi tiga kali, jangan buka pintu."
+
+Dari kejauhan terdengar sebuah bel berbunyi sekali.`,
+    choices: [
+      { text: "Baca buku catatan perawat", next: "nurseNote", clue: 1 },
+      { text: "Ikuti suara bel", next: "corridor", scare: true, loss: 15 }
+    ]
+  },
+
+  nurseNote: {
+    chapter: 0,
+    title: "Catatan Perawat",
+    text: `Catatan tulisan tangan Mira terlihat tergesa-gesa.
+
+"Pasien 317 tidak pernah tidur. Dia selalu meminta seseorang mematikan lampu koridor."
+
+"Dokter mengatakan pasien itu sudah tidak ada."
+
+"Tetapi setiap malam aku mendengar suaranya memanggil dari dalam ruangan."`,
+    choices: [
+      { text: "Menuju koridor", next: "corridor" }
+    ]
+  },
+
+  corridor: {
+    chapter: 0,
+    title: "Koridor Utama",
+    text: `Koridor memanjang seperti tidak memiliki ujung.
+
+Nomor kamar di dinding terlihat berurutan: 301, 302, 303...
+
+Namun di ujung lorong, sebuah pintu memiliki nomor 317.
+
+Lampu di atas pintu itu menyala merah.
+
+Pengeras suara tiba-tiba aktif.
+
+"Petugas jaga, harap kembali ke ruang perawatan."`,
+    choices: [
+      { text: "Periksa panel pengeras suara", next: "speaker", clue: 2 },
+      { text: "Dekati pintu 317", next: "chapter2", scare: true, loss: 10 }
+    ]
+  },
+
+  speaker: {
+    chapter: 0,
+    title: "Pengeras Suara",
+    text: `Kamu menemukan rekaman lama yang masih terpasang.
+
+Suaranya terdengar putus-putus.
+
+"Jika ada yang mendengar rekaman ini, jangan percaya pada catatan kematian pasien."
+
+"Nomor 317 bukan nomor kamar."
+
+"317 adalah jumlah pasien yang tercatat dalam laporan terakhir."
+
+Rekaman berhenti sendiri.`,
+    choices: [
+      { text: "Lanjut ke pintu 317", next: "chapter2" }
+    ]
+  },
+
+  chapter2: {
+    chapter: 1,
+    title: "Pintu 317",
+    transition: true
+  },
+
+  ward: {
+    chapter: 1,
+    title: "Bangsal 317",
+    text: `Pintu terbuka perlahan.
+
+Tidak ada tempat tidur di dalam kamar.
+
+Hanya ada sebuah kursi yang menghadap dinding.
+
+Di atas meja terdapat map pasien dengan label 317.
+
+Kamu mendengar suara seseorang berbisik:
+
+"Akhirnya kamu datang lagi."`,
+    choices: [
+      { text: "Periksa map pasien", next: "patient", clue: 3 },
+      { text: "Periksa kursi di sudut ruangan", next: "chair", scare: true, loss: 20 }
+    ]
+  },
+
+  patient: {
+    chapter: 1,
+    title: "Map Pasien",
+    text: `Map pasien berisi sebuah laporan.
+
+Nama pasien: Tidak diketahui.
+
+Usia: Tidak diketahui.
+
+Status: Dipindahkan.
+
+Di bawah laporan terdapat foto keluarga.
+
+Seseorang telah mencoret wajah di dalam foto tersebut.
+
+Di belakang foto tertulis:
+
+"Keluarga akan selalu kembali ke tempat mereka kehilangan seseorang."`,
+    choices: [
+      { text: "Cari ruang arsip", next: "archive", clue: 4 },
+      { text: "Tanyakan siapa yang ada di kursi", next: "chair", scare: true, loss: 15 }
+    ]
+  },
+
+  chair: {
+    chapter: 1,
+    title: "Kursi Kosong",
+    text: `Kursi itu masih hangat.
+
+Kamu melihat sebuah bayangan bergerak di dinding.
+
+Saat kamu berbalik, tidak ada siapa-siapa.
+
+Di lantai terdapat bekas sepatu yang mengarah menuju ruang arsip.
+
+Pintu ruang arsip sekarang terbuka.`,
+    choices: [
+      { text: "Masuk ke ruang arsip", next: "archive", clue: 4 }
+    ]
+  },
+
+  archive: {
+    chapter: 1,
+    title: "Ruang Arsip",
+    text: `Rak-rak dipenuhi dokumen lama.
+
+Kamu menemukan laporan penutupan rumah sakit.
+
+Laporan tersebut menyebutkan bahwa pada malam 17 Oktober 2009, seluruh staf meninggalkan rumah sakit dalam keadaan darurat.
+
+Tetapi laporan terakhir menyatakan masih ada satu pasien di dalam.
+
+Tidak ada nama pasien.
+
+Hanya sebuah tanda tangan: Mira.`,
+    choices: [
+      { text: "Periksa dokumen tambahan", next: "report", clue: 4 },
+      { text: "Keluar melalui tangga darurat", next: "chapter3", scare: true, loss: 12 }
+    ]
+  },
+
+  report: {
+    chapter: 1,
+    title: "Laporan Penutupan",
+    text: `Sebuah halaman tersembunyi di dalam map.
+
+"Semua ruangan telah diperiksa."
+
+"Semua pasien telah dievakuasi."
+
+"Namun, setiap kali jumlah pasien dihitung, hasilnya selalu bertambah satu."
+
+Di bagian bawah halaman ada sebuah kalimat:
+
+"Jangan pernah menghitung orang yang berdiri di belakangmu."`,
+    choices: [
+      { text: "Menuju tangga darurat", next: "chapter3" }
+    ]
+  },
+
+  chapter3: {
+    chapter: 2,
+    title: "Tangga Darurat",
+    transition: true
+  },
+
+  basement: {
+    chapter: 2,
+    title: "Ruang Bawah Tanah",
+    text: `Tangga darurat membawamu ke ruang bawah tanah.
+
+Di sini terdapat lampu kecil yang masih menyala.
+
+Sebuah lemari besi berada di ujung ruangan.
+
+Kamu melihat sebuah surat yang diselipkan di bawah pintunya.
+
+Nama penerima surat itu adalah namamu.`,
+    choices: [
+      { text: "Baca surat tersebut", next: "letter", clue: 5 },
+      { text: "Buka lemari besi", next: "safe", scare: true, loss: 18 }
+    ]
+  },
+
+  letter: {
+    chapter: 2,
+    title: "Surat Terakhir",
+    text: `Tulisan tangan di surat itu sangat mirip tulisanmu.
+
+"Jika kamu membaca ini, berarti kamu kembali."
+
+"Jangan cari pasien yang hilang."
+
+"Carilah orang yang mencatat semua nama."
+
+Di balik surat terdapat kunci kecil bertuliskan: RUANG DOKTER.`,
+    choices: [
+      { text: "Gunakan kunci ruang dokter", next: "doctor" }
+    ]
+  },
+
+  safe: {
+    chapter: 2,
+    title: "Lemari Besi",
+    text: `Lemari besi terbuka dengan suara berat.
+
+Di dalamnya terdapat sebuah rekaman kaset dan laporan terakhir.
+
+Rekaman tersebut memperdengarkan suara Mira:
+
+"Aku sudah mencoba menghentikan penghitungan itu."
+
+"Setiap nama yang ditulis di buku akan kembali."
+
+Rekaman berhenti dengan suara ketukan tiga kali.`,
+    choices: [
+      { text: "Pergi ke ruang dokter", next: "doctor", clue: 5 }
+    ]
+  },
+
+  doctor: {
+    chapter: 2,
+    title: "Ruang Dokter",
+    text: `Ruangan itu dipenuhi foto-foto lama.
+
+Di tengah meja terdapat sebuah cermin.
+
+Kamu melihat dirimu sendiri.
+
+Namun pantulanmu tidak mengikuti gerakanmu.
+
+Pantulan itu mengangkat tangannya dan menunjuk ke sebuah pintu di belakangmu.
+
+Pintu tersebut bertuliskan:
+
+RUANG PEMERIKSAAN TERAKHIR.`,
+    choices: [
+      { text: "Masuk ke ruang pemeriksaan", next: "truth", scare: true, loss: 10 }
+    ]
+  },
+
+  truth: {
+    chapter: 2,
+    title: "Kebenaran",
+    text: `Di dalam ruangan terdapat sebuah buku besar.
+
+Kamu membuka halaman pertama.
+
+Nama-nama pasien memenuhi seluruh halaman.
+
+Pada halaman terakhir, kamu menemukan tulisan:
+
+"Pasien terakhir tidak pernah meninggalkan rumah sakit."
+
+"Dia terus mencari jalan pulang."
+
+"Namanya adalah nama orang yang membaca buku ini."
+
+Tiba-tiba, kamu mengingat sesuatu.
+
+Kamu pernah datang ke rumah sakit ini.
+
+Kamu bukan orang asing.
+
+Kamu adalah saksi terakhir malam itu.`,
+    choices: [
+      { text: "Buka halaman terakhir", next: "final" }
+    ]
+  },
+
+  final: {
+    chapter: 2,
+    title: "Halaman Terakhir",
+    text: `Ada satu pertanyaan yang tersisa.
+
+Siapa sebenarnya yang memanggil namamu setiap malam?
+
+Kamu melihat sebuah pena di atas meja.
+
+Di bawah pena tertulis:
+
+"Jangan tulis namamu, kecuali kamu ingin tinggal."
+
+Di luar ruangan, suara Mira terdengar untuk terakhir kalinya.`,
+    choices: [
+      {
+        text: "Tulis namamu dan ungkap seluruh misteri",
+        next: "secretEnding",
+        condition: "allClues"
+      },
+      {
+        text: "Tutup buku dan tinggalkan rumah sakit",
+        next: "normalEnding"
+      },
+      {
+        text: "Ikuti suara Mira",
+        next: "otherEnding",
+        scare: true,
+        loss: 15
+      }
+    ]
+  }
+};
+
+/* =========================================
+   STATE DAN PENYIMPANAN
+========================================= */
+
+let settings = { ...DEFAULT_SETTINGS };
+let game = {
+  current: "lobby",
+  calm: MAX_CALM,
+  clues: [],
+  chapter: 0,
+  completed: false,
+  ending: "",
+  visited: []
+};
+
+let screenState = "menu";
+let previousScreen = "menu";
+let pendingChoice = null;
+let audioContext = null;
+let masterGain = null;
+let ambientOscillator = null;
+let wakeLock = null;
+let resizeTimer = null;
+let menuHasStarted = false;
+
+const $ = id => document.getElementById(id);
+
+const screens = [
+  "menuScreen", "gameScreen", "settingsScreen",
+  "howScreen", "chapterScreen", "endingScreen",
+  "gameoverScreen"
+];
+
+function safeSave() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      version: 1,
+      settings,
+      game,
+      onboarding: true
+    }));
+    return true;
+  } catch (error) {
+    $("menuStatus").textContent =
+      "Penyimpanan penuh atau tidak tersedia. Progres hanya tersimpan selama halaman terbuka.";
+    return false;
+  }
+}
+
+function loadSave() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+
+    const data = JSON.parse(raw);
+
+    if (
+      !data || data.version !== 1 ||
+      !data.game || !Array.isArray(data.game.clues) ||
+      !Array.isArray(data.game.visited) ||
+      typeof data.game.calm !== "number" ||
+      !SCENES[data.game.current] &&
+      !["secretEnding", "normalEnding", "otherEnding"].includes(data.game.current)
+    ) {
+      throw new Error("Data penyimpanan tidak sesuai.");
+    }
+
+    settings = {
+      ...DEFAULT_SETTINGS,
+      ...(data.settings || {})
+    };
+
+    game = {
+      ...game,
+      ...data.game,
+      calm: Math.max(0, Math.min(MAX_CALM, data.game.calm)),
+      clues: data.game.clues.filter(n =>
+        Number.isInteger(n) && n >= 0 && n < CLUES.length
+      ),
+      visited: data.game.visited.filter(n => typeof n === "string")
+    };
+
+    return true;
+  } catch (error) {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (_) {}
+    game = freshGame();
+    settings = { ...DEFAULT_SETTINGS };
+    return false;
+  }
+}
+
+function freshGame() {
+  return {
+    current: "lobby",
+    calm: MAX_CALM,
+    clues: [],
+    chapter: 0,
+    completed: false,
+    ending: "",
+    visited: []
+  };
+}
+
+function updateContinue() {
+  $("continueBtn").disabled = !menuHasStarted;
+}
+
+function switchScreen(id) {
+  screens.forEach(screenId => {
+    $(screenId).classList.toggle("active", screenId === id);
+  });
+}
+
+function showMenu() {
+  screenState = "menu";
+  closeAllOverlays();
+  stopAmbient();
+  releaseWakeLock();
+  switchScreen("menuScreen");
+  updateContinue();
+}
+
+function closeAllOverlays() {
+  ["pauseOverlay", "journalOverlay", "scareOverlay",
+   "onboardingOverlay"].forEach(id => {
+    $(id).classList.remove("active");
+  });
+}
+
+function addClue(index) {
+  if (Number.isInteger(index) && !game.clues.includes(index)) {
+    game.clues.push(index);
+    game.clues.sort((a,b) => a-b);
+  }
+}
+
+function updateHUD() {
+  $("hudChapter").textContent = String(game.chapter + 1).padStart(2, "0");
+  $("hudClues").textContent = `${game.clues.length}/${CLUES.length}`;
+  $("hudCalm").textContent = `${game.calm}%`;
+  $("calmFill").style.width = game.calm + "%";
+
+  $("clueList").innerHTML = CLUES.map((clue, i) =>
+    `<div class="clue-item ${game.clues.includes(i) ? "found" : ""}">
+      ${escapeHTML(clue)}
+    </div>`
+  ).join("");
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, c => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[c]);
+}
+
+/* =========================================
+   AUDIO WEB
+========================================= */
+
+function initAudio() {
+  try {
+    if (!audioContext) {
+      const AudioClass = window.AudioContext || window.webkitAudioContext;
+      if (!AudioClass) return;
+
+      audioContext = new AudioClass();
+      masterGain = audioContext.createGain();
+      masterGain.gain.value = settings.volume / 100;
+      masterGain.connect(audioContext.destination);
+    }
+
+    if (audioContext.state === "suspended") {
+      audioContext.resume().catch(() => {});
+    }
+  } catch (error) {
+    // Audio tidak tersedia: permainan tetap berjalan.
+  }
+}
+
+function tone(freq, duration, type = "sine", volume = .12) {
+  if (!settings.sfx || !audioContext || !masterGain) return;
+
+  try {
+    const osc = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, audioContext.currentTime);
+    gain.gain.setValueAtTime(volume, audioContext.currentTime);
+    gain.gain.exponentialRampToValueAtTime(
+      .001, audioContext.currentTime + duration
+    );
+
+    osc.connect(gain);
+    gain.connect(masterGain);
+    osc.start();
+    osc.stop(audioContext.currentTime + duration);
+  } catch (error) {}
+}
+
+function soundClick() {
+  tone(360, .08, "triangle", .07);
+}
+
+function soundScare() {
+  if (!settings.sfx) return;
+  tone(90, .6, "sawtooth", .25);
+  tone(48, .8, "triangle", .2);
+}
+
+function startAmbient() {
+  if (!settings.music) return;
+  initAudio();
+
+  try {
+    if (!audioContext || ambientOscillator) return;
+
+    ambientOscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+
+    ambientOscillator.type = "sine";
+    ambientOscillator.frequency.value = 48;
+    gain.gain.value = .025;
+
+    ambientOscillator.connect(gain);
+    gain.connect(masterGain);
+    ambientOscillator.start();
+  } catch (error) {}
+}
+
+function stopAmbient() {
+  try {
+    if (ambientOscillator) {
+      ambientOscillator.stop();
+      ambientOscillator.disconnect();
+      ambientOscillator = null;
+    }
+  } catch (error) {}
+}
+
+function syncAudio() {
+  if (masterGain && audioContext) {
+    masterGain.gain.setTargetAtTime(
+      settings.volume / 100,
+      audioContext.currentTime,
+      .05
+    );
+  }
+
+  if (!settings.music) stopAmbient();
+  else if (screenState === "playing") startAmbient();
+
+  $("soundBtn").textContent =
+    settings.sfx ? "♫" : "♪";
+  $("soundBtn").setAttribute("aria-label",
+    settings.sfx ? "Matikan suara" : "Hidupkan suara");
+}
+
+/* =========================================
+   WAKE LOCK DAN FULLSCREEN
+========================================= */
+
+async function requestWakeLock() {
+  try {
+    if ("wakeLock" in navigator && !document.hidden) {
+      wakeLock = await navigator.wakeLock.request("screen");
+      wakeLock.addEventListener("release", () => {
+        wakeLock = null;
+      });
+    }
+  } catch (error) {
+    wakeLock = null;
+  }
+}
+
+async function releaseWakeLock() {
+  try {
+    if (wakeLock) {
+      await wakeLock.release();
+      wakeLock = null;
+    }
+  } catch (error) {}
+}
+
+async function toggleFullscreen() {
+  try {
+    if (!document.fullscreenElement) {
+      if (document.documentElement.requestFullscreen) {
+        await document.documentElement.requestFullscreen();
+      } else {
+        $("menuStatus").textContent =
+          "Browser ini tidak mendukung fullscreen. Gunakan mode layar penuh dari browser.";
+      }
+    } else {
+      await document.exitFullscreen();
+    }
+  } catch (error) {
+    $("menuStatus").textContent =
+      "Fullscreen tidak tersedia di browser ini.";
+  }
+}
+
+/* =========================================
+   MESIN PERMAINAN
+========================================= */
+
+function startNewGame() {
+  initAudio();
+  game = freshGame();
+  menuHasStarted = true;
+  screenState = "playing";
+  startAmbient();
+  requestWakeLock();
+  showScene("lobby");
+}
+
+function continueGame() {
+  if (!menuHasStarted) return;
+  initAudio();
+
+  if (game.current === "secretEnding" ||
+      game.current === "normalEnding" ||
+      game.current === "otherEnding") {
+    showEnding(game.current);
+    return;
+  }
+
+  screenState = "playing";
+  startAmbient();
+  requestWakeLock();
+  showScene(game.current);
+}
+
+function showScene(key) {
+  if (!SCENES[key]) {
+    showEnding("normalEnding");
+    return;
+  }
+
+  game.current = key;
+  game.chapter = SCENES[key].chapter;
+  game.visited.push(key);
+
+  if (!game.visited.includes(key)) game.visited.push(key);
+
+  const scene = SCENES[key];
+
+  if (scene.transition) {
+    showChapterTransition(scene.chapter);
+    return;
+  }
+
+  screenState = "playing";
+  closeAllOverlays();
+  switchScreen("gameScreen");
+
+  $("sceneLabel").textContent =
+    `CHAPTER ${String(scene.chapter + 1).padStart(2, "0")} — ${CHAPTERS[scene.chapter]}`;
+  $("sceneTitle").textContent = scene.title;
+  $("sceneText").textContent = scene.text;
+
+  const choices = scene.choices.map((choice, i) => {
+    if (choice.condition === "allClues" &&
+        game.clues.length < CLUES.length) return "";
+
+    return `<button class="choice" data-choice="${i}">
+      ${escapeHTML(choice.text)}
+    </button>`;
+  }).filter(Boolean).join("");
+
+  $("choices").innerHTML = choices ||
+    `<p>Semua petunjuk telah diperiksa.</p>`;
+
+  $("choices").querySelectorAll("[data-choice]").forEach(button => {
+    button.addEventListener("click", () => {
+      const index = Number(button.dataset.choice);
+      choose(index);
+    });
+  });
+
+  updateHUD();
+  safeSave();
+}
+
+function choose(index) {
+  if (screenState !== "playing") return;
+
+  const scene = SCENES[game.current];
+  if (!scene || !scene.choices[index]) return;
+
+  const choice = scene.choices[index];
+
+  try {
+    initAudio();
+    soundClick();
+
+    if (choice.clue !== undefined) addClue(choice.clue);
+
+    if (choice.loss) {
+      const difficultyMultiplier = {
+        easy: .6,
+        normal: 1,
+        hard: 1.35
+      }[settings.difficulty] || 1;
+
+      game.calm = Math.max(
+        0,
+        game.calm - Math.round(choice.loss * difficultyMultiplier)
+      );
+    }
+
+    pendingChoice = choice;
+
+    if (choice.scare) {
+      triggerScare();
+      return;
+    }
+
+    completeChoice();
+  } catch (error) {
+    $("menuStatus").textContent =
+      "Pilihan gagal diproses. Silakan coba lagi.";
+  }
+}
+
+function completeChoice() {
+  if (!pendingChoice) return;
+
+  const choice = pendingChoice;
+  pendingChoice = null;
+
+  if (game.calm <= 0) {
+    game.current = "gameover";
+    screenState = "gameover";
+    closeAllOverlays();
+    stopAmbient();
+    releaseWakeLock();
+    switchScreen("gameoverScreen");
+    safeSave();
+    return;
+  }
+
+  if (choice.next === "secretEnding" ||
+      choice.next === "normalEnding" ||
+      choice.next === "otherEnding") {
+    showEnding(choice.next);
+    return;
+  }
+
+  showScene(choice.next);
+}
+
+function triggerScare() {
+  screenState = "playing";
+  soundScare();
+  $("scareOverlay").classList.add("active");
+  $("scareText").textContent =
+    "Ada sesuatu yang berdiri sangat dekat denganmu.";
+  updateHUD();
+  safeSave();
+}
+
+function showChapterTransition(chapter) {
+  screenState = "chapter";
+  closeAllOverlays();
+  stopAmbient();
+  switchScreen("chapterScreen");
+
+  $("chapterHeading").textContent =
+    `CHAPTER 0${chapter + 1} — ${CHAPTERS[chapter]}`;
+
+  const descriptions = [
+    "Pintu 317 terbuka. Sekarang tidak ada jalan untuk kembali.",
+    "Kamu menemukan bahwa laporan rumah sakit menyimpan kebohongan.",
+    "Semua jawaban berada di ruang pemeriksaan terakhir."
+  ];
+
+  $("chapterDescription").textContent = descriptions[chapter];
+  safeSave();
+}
+
+function beginChapter() {
+  if (game.chapter === 1) showScene("ward");
+  else if (game.chapter === 2) showScene("basement");
+}
+
+function showEnding(type) {
+  game.current = type;
+  game.ending = type;
+  game.completed = true;
+  screenState = "win";
+
+  stopAmbient();
+  releaseWakeLock();
+  closeAllOverlays();
+  switchScreen("endingScreen");
+
+  const endings = {
+    secretEnding: {
+      title: "ENDING: NAMA TERAKHIR",
+      text: `Kamu menulis namamu.
+
+Seluruh lampu rumah sakit menyala.
+
+Mira berdiri di ujung lorong, kali ini tanpa menyembunyikan wajahnya.
+
+"Terima kasih," katanya.
+
+Kamu akhirnya mengerti. Buku itu bukan daftar pasien yang hilang. Buku itu adalah daftar orang-orang yang masih mengingat rumah sakit ini.
+
+Dan ketika namamu ditulis, semua ingatan kembali.
+
+Rumah sakit tersebut akhirnya benar-benar kosong.
+
+Untuk pertama kalinya dalam 17 tahun, pukul 03.17 berlalu tanpa suara panggilan.`,
+    },
+    normalEnding: {
+      title: "ENDING: PINTU KELUAR",
+      text: `Kamu menutup buku dan berjalan menuju pintu keluar.
+
+Udara pagi menyentuh wajahmu.
+
+Rumah sakit tampak kosong.
+
+Namun saat kamu melihat jam tangan, waktu masih menunjukkan pukul 03.17.
+
+Kamu telah keluar dari bangunan itu.
+
+Tetapi apakah kamu benar-benar telah meninggalkannya?
+
+Dari pengeras suara yang jauh, terdengar namamu dipanggil sekali lagi.`,
+    },
+    otherEnding: {
+      title: "ENDING: PENJAGA",
+      text: `Kamu mengikuti suara Mira hingga ujung lorong.
+
+Sosok itu tidak lagi terlihat seperti manusia.
+
+Dia menyerahkan sebuah kartu identitas.
+
+Namamu tertera sebagai petugas jaga malam.
+
+Kamu baru menyadari bahwa rumah sakit tidak pernah mencari pasien baru.
+
+Rumah sakit sedang mencari pengganti penjaganya.
+
+Pagi tidak pernah datang di tempat ini.`,
+    }
+  };
+
+  const ending = endings[type] || endings.normalEnding;
+
+  $("endingTitle").textContent = ending.title;
+  $("endingText").textContent = ending.text;
+  $("endingStats").textContent =
+    `Petunjuk ditemukan: ${game.clues.length}/${CLUES.length} · Ketenangan tersisa: ${game.calm}%`;
+
+  safeSave();
+}
+
+function restartGame() {
+  if (!confirm("Mulai ulang dari awal? Progres permainan ini akan diganti.")) {
+    return;
+  }
+  startNewGame();
+}
+
+function goToMenu() {
+  if (screenState === "playing" &&
+      !confirm("Keluar ke menu? Progres terakhir sudah disimpan.")) {
+    return;
+  }
+
+  pendingChoice = null;
+  safeSave();
+  showMenu();
+}
+
+function pauseGame() {
+  if (screenState !== "playing") return;
+
+  screenState = "paused";
+  stopAmbient();
+  releaseWakeLock();
+  $("pauseOverlay").classList.add("active");
+}
+
+function resumeGame() {
+  if (screenState !== "paused") return;
+
+  screenState = "playing";
+  $("pauseOverlay").classList.remove("active");
+  initAudio();
+  startAmbient();
+  requestWakeLock();
+}
+
+function showJournal() {
+  const found = game.clues.map(i => CLUES[i]);
+  $("journalContent").innerHTML = found.length
+    ? `<p>Petunjuk yang telah ditemukan:</p><ul>${
+        found.map(x => `<li>${escapeHTML(x)}</li>`).join("")
+      }</ul>`
+    : `<p>Belum ada petunjuk ditemukan. Periksa meja, dokumen, dan ruangan yang kamu temui.</p>`;
+
+  $("journalOverlay").classList.add("active");
+}
+
+/* =========================================
+   PENGATURAN
+========================================= */
+
+function loadSettingsUI() {
+  $("sfxSetting").checked = settings.sfx;
+  $("musicSetting").checked = settings.music;
+  $("volumeSetting").value = settings.volume;
+  $("difficultySetting").value = settings.difficulty;
+}
+
+function saveSettingsUI() {
+  settings.sfx = $("sfxSetting").checked;
+  settings.music = $("musicSetting").checked;
+  settings.volume = Number($("volumeSetting").value);
+  settings.difficulty = $("difficultySetting").value;
+
+  if (masterGain && audioContext) {
+    masterGain.gain.setTargetAtTime(
+      settings.volume / 100,
+      audioContext.currentTime,
+      .05
+    );
+  }
+
+  syncAudio();
+  safeSave();
+  showMenu();
+}
+
+/* =========================================
+   EVENT LISTENERS
+========================================= */
+
+function bind(id, event, callback) {
+  const element = $(id);
+  if (!element) throw new Error("Elemen tidak ditemukan: " + id);
+
+  element.addEventListener(event, e => {
+    try {
+      callback(e);
+    } catch (error) {
+      $("menuStatus").textContent =
+        "Terjadi kendala pada tindakan tersebut. Silakan ulangi.";
+    }
+  });
+}
+
+function bindEvents() {
+  bind("startBtn", "click", () => {
+    if (!localStorage.getItem(STORAGE_KEY)) {
+      startNewGame();
+      $("onboardingOverlay").classList.add("active");
+    } else {
+      startNewGame();
+    }
+  });
+
+  bind("continueBtn", "click", continueGame);
+
+  bind("settingsBtn", "click", () => {
+    loadSettingsUI();
+    switchScreen("settingsScreen");
+  });
+
+  bind("howBtn", "click", () => switchScreen("howScreen"));
+  bind("settingsBackBtn", "click", saveSettingsUI);
+  bind("howBackBtn", "click", showMenu);
+
+  bind("pauseBtn", "click", pauseGame);
+  bind("resumeBtn", "click", resumeGame);
+  bind("pauseRestartBtn", "click", restartGame);
+  bind("pauseMenuBtn", "click", goToMenu);
+
+  bind("journalBtn", "click", showJournal);
+  bind("journalCloseBtn", "click", () =>
+    $("journalOverlay").classList.remove("active")
+  );
+
+  bind("scareContinueBtn", "click", () => {
+    $("scareOverlay").classList.remove("active");
+    completeChoice();
+  });
+
+  bind("chapterContinueBtn", "click", () => {
+    initAudio();
+    startAmbient();
+    beginChapter();
+  });
+
+  bind("endingRestartBtn", "click", startNewGame);
+  bind("endingMenuBtn", "click", showMenu);
+  bind("retryBtn", "click", startNewGame);
+  bind("gameoverMenuBtn", "click", showMenu);
+
+  bind("fullscreenBtn", "click", toggleFullscreen);
+
+  bind("soundBtn", "click", () => {
+    settings.sfx = !settings.sfx;
+    syncAudio();
+    safeSave();
+    if (settings.sfx) {
+      initAudio();
+      soundClick();
+    }
+  });
+
+  bind("onboardingBtn", "click", () => {
+    $("onboardingOverlay").classList.remove("active");
+    menuHasStarted = true;
+    switchScreen("gameScreen");
+    safeSave();
+  });
+
+  bind("difficultySetting", "change", () => {});
+  bind("sfxSetting", "change", () => {});
+  bind("musicSetting", "change", () => {});
+  bind("volumeSetting", "input", () => {
+    if (masterGain && audioContext) {
+      masterGain.gain.setTargetAtTime(
+        Number($("volumeSetting").value) / 100,
+        audioContext.currentTime,
+        .05
+      );
+    }
+  });
+
+  document.addEventListener("keydown", event => {
+    if (event.repeat) return;
+
+    const key = event.key.toLowerCase();
+
+    if (key === "escape" || key === "p") {
+      if (screenState === "playing") pauseGame();
+      else if (screenState === "paused") resumeGame();
+    }
+
+    if (key === "m") {
+      settings.sfx = !settings.sfx;
+      syncAudio();
+      safeSave();
+    }
+
+    if (key === "f") toggleFullscreen();
+
+    if (key === "r" &&
+        ["playing", "paused"].includes(screenState)) {
+      restartGame();
+    }
+  });
+
+  window.addEventListener("blur", () => {
+    if (screenState === "playing") pauseGame();
+    stopAmbient();
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      if (screenState === "playing") pauseGame();
+      stopAmbient();
+      releaseWakeLock();
+    } else {
+      initAudio();
+    }
+  });
+
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      document.documentElement.style.setProperty(
+        "--viewport-height",
+        window.innerHeight + "px"
+      );
+    }, 180);
+  });
+
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        document.documentElement.style.setProperty(
+          "--viewport-height",
+          window.visualViewport.height + "px"
+        );
+      }, 180);
+    });
+  }
+
+  // Tombol kembali Android diarahkan ke pause.
+  try {
+    history.pushState({ game: true }, "", location.href);
+    window.addEventListener("popstate", () => {
+      if (screenState === "playing") pauseGame();
+      history.pushState({ game: true }, "", location.href);
+    });
+  } catch (error) {}
+
+  window.addEventListener("beforeunload", event => {
+    if (screenState === "playing" || screenState === "paused") {
+      safeSave();
+      event.preventDefault();
+      event.returnValue = "";
+    }
+  });
+
+  document.addEventListener("contextmenu", event => {
+    if (event.target.closest("button")) event.preventDefault();
+  });
+}
+
+/* =========================================
+   INISIALISASI
+========================================= */
+
+function initialize() {
+  try {
+    const loaded = loadSave();
+
+    if (loaded) {
+      menuHasStarted = game.visited.length > 0;
+    }
+
+    bindEvents();
+    loadSettingsUI();
+    syncAudio();
+    updateContinue();
+
+    if (!loaded) {
+      $("menuStatus").textContent =
+        "Arsip baru tersedia. Tidak ada rekaman permainan sebelumnya.";
+    } else {
+      $("menuStatus").textContent =
+        "Rekaman terakhir berhasil ditemukan.";
+    }
+  } catch (error) {
+    switchScreen("menuScreen");
+    $("menuStatus").textContent =
+      "Permainan mengalami kendala saat dimulai. Muat ulang halaman untuk mencoba lagi.";
+  }
+}
+
+initialize();
+</script>
+</body>
+</html>
